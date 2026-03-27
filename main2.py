@@ -60,6 +60,7 @@ def recommend_movies(user_id, user_movie_matrix, user_similarity_df, top_n=5, to
             return popular_scores_series.head(top_n)
         # 如果热门榜不够，再用全局均值补齐（用虚拟 score）
         out = popular_scores_series.copy() #创建副本是为了不破坏原本热门榜数据，因为如果out直接等于popular_scores_series的话，后面修改out会影响原数据
+        need = top_n-len(out)
         if need > 0:
             out = pd.concat([out, pd.Series([global_mean] * need, index=[])]).sort_values(ascending=False) #补的index是空的（会显示NaN?)，评分是全局均值，没有真实的movieid，只是为了保证推荐数量
         return out.head(top_n)
