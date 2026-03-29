@@ -1,13 +1,36 @@
 # app.py
+from pathlib import Path
+
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 import recommender as rec
+
+BASE_DIR = Path(__file__).resolve().parent
+STATIC_DIR = BASE_DIR / "static"
 
 app = FastAPI(
     title="Film Recommender API",
     description="基于用户协同过滤的电影推荐（与 main2 逻辑一致）",
     version="1.0.0",
 )
+
+# CORS：允许浏览器从其他源（域名/端口）访问本 API；开发阶段常用 allow_origins=["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/")
+async def read_root():
+    """首页：返回 static/index.html（单页界面）。"""
+    return FileResponse(STATIC_DIR / "index.html")
 
 
 @app.get("/health")
@@ -61,3 +84,11 @@ def metrics(k: int = Query(10, ge=1, le=50), rel_threshold: float = Query(4.0, g
         "k": k,
         "rel_threshold": rel_threshold,
     }
+
+
+# 挂载静态目录：/static/... 对应 static/ 文件夹下的文件（如 /static/index.html）
+app.mount(
+    "/static",
+    StaticFiles(directory=str(STATIC_DIR)),
+    name="static",
+)
