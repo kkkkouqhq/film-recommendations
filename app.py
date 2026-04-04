@@ -37,12 +37,12 @@ async def read_root():
 def health():
     return {"status": "ok"}   #健康检查接口，看起来只是个简单又没意义的接口，但可以用来快速判断服务有没有挂
 
-@app.get("/recommend/{user_id}")
+@app.get("/recommend/{user_id}")    #大括号表示这是个变量而不是字符串路径
 def recommend(
     user_id: int,
     top_n: int = Query(5, ge=1, le=50, description="返回前几条推荐"),
 ):
-    """为指定用户返回推荐列表（含片名）。"""
+    """为指定用户返回推荐列表（含片名）。"""    #三引号可以写多行字符串，在python中用来被当成函数的说明文档，会被fastapi识别在swaggerui里显示
     try:
         df = rec.recommend_with_titles(user_id, top_n=top_n)
     except Exception as e:
