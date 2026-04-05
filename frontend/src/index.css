@@ -1,0 +1,21 @@
+/* 全局：与 Vite 默认模板解耦，交给 App 内 .wrap 控制版式 */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: radial-gradient(
+    ellipse 120% 80% at 50% -20%,
+    #1e3a5f 0%,
+    #0f1419 55%
+  );
+  color: #e7ecf3;
+  line-height: 1.5;
+}
+
+#root {
+  min-height: 100vh;
+}
