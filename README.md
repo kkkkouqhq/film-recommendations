@@ -151,4 +151,6 @@ Personal / academic portfolio project for internship and job applications.
 
 ## License
 
-Dataset usage follows [MovieLens terms](https://grouplens.org/datasets/movielens/). Code license: specify as needed for your employer or school.
+This project is licensed under the [MIT License](./LICENSE).
+
+Dataset usage follows the [MovieLens terms](https://grouplens.org/datasets/movielens/).
