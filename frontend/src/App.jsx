@@ -121,8 +121,8 @@ function App() {
           ))}
         </ul>
         {items.length === 0 && loading && (
-          <p className="empty">加载中…</p>
-        )}
+          <p className="empty">加载中…</p>   /*这里的逻辑是，第一次进页面或上一次空结果时显示加载中，有过推荐结果时即显示旧页面时不显示加载中*/
+        )} 
         {items.length === 0 && listSettled && !loading && (
           <p className="empty">该条件下无推荐结果（或列表为空）。</p>
         )}
