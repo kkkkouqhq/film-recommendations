@@ -4,9 +4,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
-# ----------------------------
-# 1) 读取数据 + 划分训练/测试
-# ----------------------------
+
+# 读取数据 + 划分训练/测试
 ratings = pd.read_csv(
     "u.data",
     sep="\t",
@@ -15,9 +14,8 @@ ratings = pd.read_csv(
 
 train_df, test_df = train_test_split(ratings, test_size=0.2, random_state=42)
 
-# ----------------------------
-# 2) 用训练集构建用户-电影矩阵
-# ----------------------------
+
+# 用训练集构建用户-电影矩阵
 user_movie_matrix = train_df.pivot_table(
     index="user_id",
     columns="movie_id",
@@ -33,9 +31,8 @@ user_similarity_df = pd.DataFrame(
     columns=user_movie_matrix.index
 )
 
-# ----------------------------
-# 3) 冷启动：热门榜兜底（新用户用）
-# ----------------------------
+
+# 冷启动：热门榜兜底（新用户用）
 global_mean = float(train_df["rating"].mean())
 
 movie_stats = train_df.groupby("movie_id")["rating"].agg(["mean", "count"]).reset_index()   # 这里reset_index把 movie_id 从 index 变成普通列，方便后面 merge
@@ -50,9 +47,8 @@ if len(popular_scores_series) == 0:
     # 万一阈值太严格，比如min_count设置的值过高
     popular_scores_series = pd.Series(dtype=float) #创建一个空的浮点类型的series，即空的推荐结果，防止后续操作报错
 
-# ----------------------------
-# 4) 核心推荐函数
-# ----------------------------
+
+# 核心推荐函数
 def recommend_movies(user_id, user_movie_matrix, user_similarity_df, top_n=5, top_users_n=10):
     # 冷启动：新用户（训练集中没有）
     if user_id not in user_movie_matrix.index:
@@ -99,9 +95,8 @@ def recommend_movies(user_id, user_movie_matrix, user_similarity_df, top_n=5, to
     return recommendations
 
 
-# ----------------------------
-# 5) 用于评估：预测单个 (user, movie) 的评分
-# ----------------------------
+
+# 用于评估：预测单个 (user, movie) 的评分
 def predict_rating(user_id, movie_id, user_movie_matrix, user_similarity_df, top_users_n=10):
     # 用户冷启动
     if user_id not in user_movie_matrix.index:
@@ -132,9 +127,8 @@ def predict_rating(user_id, movie_id, user_movie_matrix, user_similarity_df, top
     return float(valid.mean())
 
 
-# ----------------------------
-# 6) 评估指标：MAE / RMSE / Precision@K / Recall@K
-# ----------------------------
+
+# 评估指标：MAE / RMSE / Precision@K / Recall@K
 def evaluate_predictions_mae_rmse():
     y_true = [] #真实评分，注意是空的list
     y_pred = [] #预测评分
@@ -191,9 +185,8 @@ print(f"RMSE: {rmse:.4f}")
 print(f"Precision@10: {precision_at_k:.4f}")
 print(f"Recall@10: {recall_at_k:.4f}")
 
-# ----------------------------
-# 7) 读取电影信息，并输出一个用户的推荐（沿用原来的输出方式）
-# ----------------------------
+
+# 读取电影信息，并输出一个用户的推荐（沿用原来的输出方式）
 movies = pd.read_csv(
     r"D:\film rec\u.item",
     sep="|",
