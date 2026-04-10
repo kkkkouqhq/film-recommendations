@@ -37,7 +37,7 @@ async def read_root():
 def health():
     return {"status": "ok"}   #健康检查接口，看起来只是个简单又没意义的接口，但可以用来快速判断服务有没有挂
 
-@app.get("/recommend/{user_id}")    #大括号表示这是个变量而不是字符串路径
+@app.get("/recommend/{user_id}")    #fastapi规定在字符串路径中用{变量名}表示路径参数
 def recommend(
     user_id: int,
     top_n: int = Query(5, ge=1, le=50, description="返回前几条推荐"),
