@@ -204,3 +204,4 @@ recommendations = recommendations.merge(movies, on="movie_id")
 
 print("推荐结果：")
 print(recommendations[["title", "score"]])
+#daily work 
