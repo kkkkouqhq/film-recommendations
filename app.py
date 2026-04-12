@@ -92,4 +92,3 @@ app.mount(
     StaticFiles(directory=str(STATIC_DIR)),
     name="static",
 )
-#daily work
